@@ -29,10 +29,22 @@ public class ConfigFileReader {
 		}		
 	}
 	
-	public String getDriverPath(){
-		String driverPath = properties.getProperty("driverPath");
+	public String getDriverPathChrome(){
+		String driverPath = properties.getProperty("driverPathChrome");
 		if(driverPath!= null) return driverPath;
-		else throw new RuntimeException("driverPath not specified in the Configuration.properties file.");		
+		else throw new RuntimeException("driverPathChrome not specified in the Configuration.properties file.");		
+	}
+	
+	public String getDriverPathEdge(){
+		String driverPath = properties.getProperty("driverPathEdge");
+		if(driverPath!= null) return driverPath;
+		else throw new RuntimeException("driverPathEdge not specified in the Configuration.properties file.");		
+	}
+	
+	public String getDriverPathFirefox(){
+		String driverPath = properties.getProperty("driverPathFirefox");
+		if(driverPath!= null) return driverPath;
+		else throw new RuntimeException("driverPathFirefox not specified in the Configuration.properties file.");		
 	}
 	
 	public long getImplicitlyWait() {		

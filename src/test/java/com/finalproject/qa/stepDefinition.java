@@ -29,18 +29,12 @@ public class stepDefinition {
     @Then("^run should be successful$")
     public void thenStatment() {
         System.out.println("Then statement executed successfully");
-        configFileReader = new ConfigFileReader();
-        System.out.println(configFileReader.getDriverPath());
-        System.setProperty("webdriver.chrome.driver", configFileReader.getDriverPath());
     }
 
     @Given("navigate to Gmail page")
     public void navigate_to_Gmail_page() {
-        configFileReader = new ConfigFileReader();
-        System.out.println(configFileReader.getDriverPath());
-        System.setProperty("webdriver.chrome.driver", configFileReader.getDriverPath());
+        driver = WebDriverProvider.createDriver("edge");
 
-        driver = new ChromeDriver();
         driver.get("http://www.gmail.com");
     }
 
@@ -59,8 +53,4 @@ public class stepDefinition {
         assertTrue("Login not successful", expectedText.equals(actualText));
     }
 
-
-  
-
-    
 }
