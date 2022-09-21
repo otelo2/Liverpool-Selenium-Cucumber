@@ -13,6 +13,7 @@ public class HomePage extends CommonElements {
         super(driver);
         this.driver = driver;
         PageFactory.initElements(driver, this);
+        driver.get("https://magento.softwaretestingboard.com/");
     }
 
 }

@@ -1,5 +1,6 @@
 package com.finalproject.qa.pageobjects;
 
+import org.openqa.selenium.By;
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.WebElement;
 import org.openqa.selenium.support.FindBy;
@@ -22,10 +23,28 @@ public class LoginPage {
     @FindBy(css = "#send2")
     WebElement signInButton;
 
+    By errorMessageBy = By.cssSelector("#maincontent > div.page.messages > div:nth-child(2) > div > div");
+
     public void logIn(String email, String password) {
         emailTextBox.sendKeys(email);
         passwordTextBox.sendKeys(password);
         signInButton.click();
+    }
+
+    public void writeEmail(String email) {
+        emailTextBox.sendKeys(email);
+    }
+
+    public void writePassword(String password) {
+        passwordTextBox.sendKeys(password);
+    }
+
+    public void clickSignInButton() {
+        signInButton.click();
+    }
+
+    public WebElement getLoginErrorMessage() {
+        return driver.findElement(errorMessageBy);
     }
 
 }

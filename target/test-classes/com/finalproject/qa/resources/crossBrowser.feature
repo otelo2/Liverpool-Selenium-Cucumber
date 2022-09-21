@@ -1,4 +1,4 @@
-Feature: Login Feature File
+Feature: Test cross-browser functionality
 
   @selenium
   Scenario Outline: Go to google and make a search on multiple browsers

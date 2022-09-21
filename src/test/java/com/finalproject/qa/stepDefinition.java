@@ -9,6 +9,8 @@ import org.openqa.selenium.*;
 import org.openqa.selenium.chrome.ChromeDriver;
 
 import com.finalproject.qa.ConfigFileReader;
+import com.finalproject.qa.pageobjects.HomePage;
+import com.finalproject.qa.pageobjects.LoginPage;
 
 import io.cucumber.java.After;
 import io.cucumber.java.en.*;
@@ -16,6 +18,8 @@ import io.cucumber.java.en.*;
 public class stepDefinition {
     WebDriver driver;
     ConfigFileReader configFileReader;
+    HomePage homePage;
+    LoginPage loginPage;
 
     @Given("^sample feature file is ready$")
     public void givenStatment() {
@@ -54,6 +58,43 @@ public class stepDefinition {
         System.out.println(searchBarInResults.getAttribute("value"));
         assertEquals(term, searchBarInResults.getAttribute("value"));
         driver.quit();
+    }
+
+    @Given("^navigate to Luma home page in (.+)$")
+    public void navigate_to_luma_home_page_in(String browser) throws Throwable {
+        driver = WebDriverProvider.createDriver(browser);
+        homePage = new HomePage(driver);
+    }
+
+    @When("^click on sign in button$")
+    public void click_on_sign_in_button() throws Throwable {
+        loginPage = homePage.goToLoginPage(driver);
+    }
+
+    @Then("^an error message should appear$")
+    public void an_error_message_should_appear() throws Throwable {
+        String expectedErrorMessage = "The account sign-in was incorrect or your account is disabled temporarily. Please wait and try again later.";
+
+        WebElement errorMessageElement = loginPage.getLoginErrorMessage();
+        String actualErrorMessage = errorMessageElement.getText();
+
+        assertEquals(expectedErrorMessage, actualErrorMessage);
+        driver.quit();
+    }
+
+    @And("^type the non existing email (.+)$")
+    public void type_the_non_existing_email(String email) throws Throwable {
+        loginPage.writeEmail(email);
+    }
+
+    @And("^type the non existing password (.+)$")
+    public void type_the_non_existing_password(String password) throws Throwable {
+        loginPage.writePassword(password);
+    }
+
+    @And("^click on the sign in button$")
+    public void click_on_the_sign_in_button() throws Throwable {
+        loginPage.clickSignInButton();
     }
 
     // @After
