@@ -1,5 +1,6 @@
 package com.finalproject.qa;
 
+import org.openqa.selenium.By;
 import org.openqa.selenium.WebDriver;
 
 /**
@@ -20,6 +21,9 @@ public final class App {
         // This is where I test stuff because cucumber sometimes doesn't output anything
         WebDriver driver = WebDriverProvider.createDriver("firefox");
         driver.get("https://www.google.com");
+        driver.findElement(By.cssSelector(
+                "body > div.L3eUgb > div.o3j99.ikrT4e.om7nvf > form > div:nth-child(1) > div.A8SBwf > div.RNNXgb > div > div.a4bIc > input"))
+                .sendKeys("jsajdasjdjasd");
         Thread.sleep(1000);
         driver.quit();
 

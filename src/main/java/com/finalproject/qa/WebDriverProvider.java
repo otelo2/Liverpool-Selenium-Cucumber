@@ -1,5 +1,7 @@
 package com.finalproject.qa;
 
+import java.time.Duration;
+
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.chrome.ChromeDriver;
 import org.openqa.selenium.edge.*;
@@ -33,6 +35,7 @@ public class WebDriverProvider {
                 System.out.println("Created chrome driver");
                 break;
         }
+        driver.manage().timeouts().implicitlyWait(Duration.ofSeconds(5));
         return driver;
     }
 
