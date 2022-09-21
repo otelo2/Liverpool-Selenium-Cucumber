@@ -10,6 +10,7 @@ import org.openqa.selenium.chrome.ChromeDriver;
 
 import com.finalproject.qa.ConfigFileReader;
 
+import io.cucumber.java.After;
 import io.cucumber.java.en.*;
 
 public class stepDefinition {
@@ -31,26 +32,33 @@ public class stepDefinition {
         System.out.println("Then statement executed successfully");
     }
 
-    @Given("navigate to Gmail page")
-    public void navigate_to_Gmail_page() {
-        driver = WebDriverProvider.createDriver("edge");
-
-        driver.get("http://www.gmail.com");
+    @Given("^navigate to Google frontpage in (.+)$")
+    public void navigate_to_google_frontpage_in(String browser) throws Throwable {
+        System.out.println("Creating browser of " + browser);
+        driver = WebDriverProvider.createDriver(browser);
+        driver.get("http://www.google.com");
     }
 
-    @When("user logged in using username as \\{username} and password as \\{password}")
-    public void user_logged_in_using_username_as_and_password_as(String username, String password) {
-        driver.findElement(By.xpath("//*[@id='Email']")).sendKeys(username);
-        driver.findElement(By.xpath("//*[@id='Passwd']")).sendKeys(password);
-        driver.findElement(By.xpath("//*[@id='signIn']")).click();
-        driver.manage().timeouts().implicitlyWait(Duration.ofSeconds(5));
+    @When("^perform a search of (.+)$")
+    public void perform_a_search_of(String term) throws Throwable {
+        WebElement searchBox = driver
+                .findElement(By.xpath("/html/body/div[1]/div[3]/form/div[1]/div[1]/div[1]/div/div[2]/input"));
+        searchBox.sendKeys(term);
+        driver.findElement(By.xpath("/html/body/div[1]/div[3]/form/div[1]/div[1]/div[3]/center/input[1]")).click();
     }
 
-    @Then("home page should be displayed")
-    public void verifySuccessful() {
-        String expectedText = "Gmail";
-        String actualText = driver.findElement(By.xpath("//*[@id='gbq1']/div/a/span")).getText();
-        assertTrue("Login not successful", expectedText.equals(actualText));
+    @Then("^search result should be displayed of (.+)$")
+    public void search_result_should_be_displayed_of(String term) throws Throwable {
+        WebElement searchBarInResults = driver
+                .findElement(By.xpath("//*[@id=\"tsf\"]/div[1]/div[1]/div[2]/div/div[2]/input"));
+        System.out.println(searchBarInResults.getAttribute("value"));
+        assertEquals(term, searchBarInResults.getAttribute("value"));
+        driver.quit();
     }
+
+    // @After
+    // public void tearDown() {
+
+    // }
 
 }
