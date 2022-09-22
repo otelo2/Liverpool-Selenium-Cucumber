@@ -50,12 +50,26 @@ public class stepDefinition {
         String actualErrorMessage = loginPage.getLoginErrorMessage();
 
         assertEquals(expectedErrorMessage, actualErrorMessage);
-        driver.quit();
     }
 
-    // @After
-    // public void tearDown() {
+    @When("login with the standard_user credentials")
+    public void login_with_the_standard_user_credentials() {
+        homePage = loginPage.logIn("standard_user", "secret_sauce");
+    }
 
-    // }
+    @Then("i should log in to the store home page")
+    public void i_should_log_in_to_the_store_home_page() {
+        String expectedHeader = "PRODUCTS";
+
+        String actualHeader = homePage.getHeaderText();
+
+        assertEquals(expectedHeader, actualHeader);
+
+    }
+
+    @After
+    public void tearDown() {
+        driver.quit();
+    }
 
 }

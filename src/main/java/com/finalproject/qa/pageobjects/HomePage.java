@@ -5,15 +5,20 @@ import org.openqa.selenium.WebElement;
 import org.openqa.selenium.support.FindBy;
 import org.openqa.selenium.support.PageFactory;
 
-public class HomePage extends CommonElements {
+public class HomePage {
 
     WebDriver driver;
 
     public HomePage(WebDriver driver) {
-        super(driver);
         this.driver = driver;
         PageFactory.initElements(driver, this);
-        driver.get("https://magento.softwaretestingboard.com/");
+    }
+
+    @FindBy(css = "#header_container > div.header_secondary_container > span")
+    WebElement productsHeaderText;
+
+    public String getHeaderText() {
+        return productsHeaderText.getText();
     }
 
 }
