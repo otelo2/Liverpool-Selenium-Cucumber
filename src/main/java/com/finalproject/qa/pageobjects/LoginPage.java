@@ -12,27 +12,29 @@ public class LoginPage {
     public LoginPage(WebDriver driver) {
         this.driver = driver;
         PageFactory.initElements(driver, this);
+        driver.get("https://www.saucedemo.com/");
     }
 
-    @FindBy(css = "#email")
-    WebElement emailTextBox;
+    @FindBy(css = "#user-name")
+    WebElement usernameTextBox;
 
-    @FindBy(css = "#pass")
+    @FindBy(css = "#password")
     WebElement passwordTextBox;
 
-    @FindBy(css = "#send2")
+    @FindBy(css = "#login-button")
     WebElement signInButton;
 
-    By errorMessageBy = By.cssSelector("#maincontent > div.page.messages > div:nth-child(2) > div > div");
+    By errorMessageBy = By.cssSelector("#login_button_container > div > form > div.error-message-container.error > h3");
 
-    public void logIn(String email, String password) {
-        emailTextBox.sendKeys(email);
+    public HomePage logIn(String username, String password) {
+        usernameTextBox.sendKeys(username);
         passwordTextBox.sendKeys(password);
         signInButton.click();
+        return new HomePage(driver);
     }
 
-    public void writeEmail(String email) {
-        emailTextBox.sendKeys(email);
+    public void writeUsername(String username) {
+        usernameTextBox.sendKeys(username);
     }
 
     public void writePassword(String password) {
@@ -43,8 +45,8 @@ public class LoginPage {
         signInButton.click();
     }
 
-    public WebElement getLoginErrorMessage() {
-        return driver.findElement(errorMessageBy);
+    public String getLoginErrorMessage() {
+        return driver.findElement(errorMessageBy).getText();
     }
 
 }
