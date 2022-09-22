@@ -2,6 +2,8 @@ package com.finalproject.qa;
 
 import static org.junit.Assert.*;
 
+import java.util.List;
+
 import org.openqa.selenium.*;
 
 import com.finalproject.qa.pageobjects.HomePage;
@@ -15,6 +17,7 @@ public class stepDefinition {
     ConfigFileReader configFileReader;
     HomePage homePage;
     LoginPage loginPage;
+    String actualPrice;
 
     @Given("^navigate to Saucedemo login page in (.+)$")
     public void navigate_to_saucedemo_login_page_in(String browser) {
@@ -60,6 +63,23 @@ public class stepDefinition {
 
         assertEquals(expectedHeader, actualHeader);
 
+    }
+
+    @Given("i am in the home page")
+    public void i_am_in_the_home_page() {
+        assertTrue(homePage.ifInHomePage());
+    }
+
+    @When("^i check the price of the (.+) product$")
+    public void i_check_the_price_of_the_product(String number) {
+        List<WebElement> elementList = homePage.getProductsList();
+        Integer numberInteger = Integer.parseInt(number);
+        actualPrice = homePage.getPriceOfProduct(elementList.get(numberInteger));
+    }
+
+    @Then("^the actual price should match the (.+) price$")
+    public void the_actual_price_should_match_the_price(String expected) {
+        assertEquals(expected, actualPrice);
     }
 
     @After
