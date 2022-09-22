@@ -43,9 +43,9 @@ public class stepDefinition {
 
     }
 
-    @Then("^an error message should appear$")
-    public void an_error_message_should_appear() throws Throwable {
-        String expectedErrorMessage = "Epic sadface: Username and password do not match any user in this service";
+    @Then("^an error message should appear (.+)$")
+    public void an_error_message_should_appear(String error) {
+        String expectedErrorMessage = error;
 
         String actualErrorMessage = loginPage.getLoginErrorMessage();
 

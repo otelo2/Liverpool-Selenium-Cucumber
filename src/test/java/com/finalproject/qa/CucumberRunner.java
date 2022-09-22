@@ -6,7 +6,7 @@ import io.cucumber.junit.Cucumber;
 import io.cucumber.junit.CucumberOptions;
 
 @RunWith(Cucumber.class)
-@CucumberOptions(tags = "@Positive")
+@CucumberOptions(tags = "@Negative")
 public class CucumberRunner {
 
 }
