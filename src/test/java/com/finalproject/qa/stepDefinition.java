@@ -2,13 +2,8 @@ package com.finalproject.qa;
 
 import static org.junit.Assert.*;
 
-import java.time.Duration;
-import java.util.concurrent.TimeUnit;
-
 import org.openqa.selenium.*;
-import org.openqa.selenium.chrome.ChromeDriver;
 
-import com.finalproject.qa.ConfigFileReader;
 import com.finalproject.qa.pageobjects.HomePage;
 import com.finalproject.qa.pageobjects.LoginPage;
 
@@ -28,17 +23,17 @@ public class stepDefinition {
     }
 
     @When("^type the non existing username (.+)$")
-    public void type_the_non_existing_username(String username) throws Throwable {
+    public void type_the_non_existing_username(String username) {
         loginPage.writeUsername(username);
     }
 
     @And("^type the non existing password (.+)$")
-    public void type_the_non_existing_password(String password) throws Throwable {
+    public void type_the_non_existing_password(String password) {
         loginPage.writePassword(password);
     }
 
     @And("^click on the login button$")
-    public void click_on_the_login_button() throws Throwable {
+    public void click_on_the_login_button() {
         loginPage.clickSignInButton();
 
     }
