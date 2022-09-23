@@ -22,14 +22,14 @@ public class ShoppingCartPage {
     @FindBy(css = "#checkout")
     WebElement checkoutButton;
 
-    By cartProductsBy = By.cssSelector("#cart_contents_container > div > div.cart_list > div");
+    By cartProductsBy = By.cssSelector("#cart_contents_container > div > div.cart_list > div.cart_item");
 
     public List<WebElement> getCartProductsList() {
         return driver.findElements(cartProductsBy);
     }
 
     public String getProductName(WebElement product) {
-        return product.findElement(By.className("inventory_item_name")).getText();
+        return product.findElement(By.cssSelector("[id*='_title_link']")).getText();
     }
 
     public String getProductDescription(WebElement product) {
@@ -41,7 +41,7 @@ public class ShoppingCartPage {
     }
 
     public void removeProductFromCart(WebElement product) {
-        product.findElement(By.className("btn btn_secondary btn_small cart_button")).click();
+        product.findElement(By.cssSelector(".btn.btn_secondary.btn_small.cart_button")).click();
     }
 
     public boolean ifInShoppingCartPage() {

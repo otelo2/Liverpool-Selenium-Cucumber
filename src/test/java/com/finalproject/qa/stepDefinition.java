@@ -8,6 +8,7 @@ import org.openqa.selenium.*;
 
 import com.finalproject.qa.pageobjects.HomePage;
 import com.finalproject.qa.pageobjects.LoginPage;
+import com.finalproject.qa.pageobjects.ShoppingCartPage;
 
 import io.cucumber.java.After;
 import io.cucumber.java.en.*;
@@ -17,6 +18,7 @@ public class stepDefinition {
     ConfigFileReader configFileReader;
     HomePage homePage;
     LoginPage loginPage;
+    ShoppingCartPage shoppingCartPage;
     String actualPrice;
 
     @Given("^navigate to Saucedemo login page in (.+)$")
@@ -80,6 +82,26 @@ public class stepDefinition {
     @Then("^the actual price should match the (.+) price$")
     public void the_actual_price_should_match_the_price(String expected) {
         assertEquals(expected, actualPrice);
+    }
+
+    @When("^i add the (.+) product to the cart$")
+    public void i_add_the_product_to_the_cart(String number) {
+        List<WebElement> elementList = homePage.getProductsList();
+        Integer numberInteger = Integer.parseInt(number);
+        homePage.clickAddToCartButton(elementList.get(numberInteger));
+    }
+
+    @Then("^the name of the product in the cart should match the (.+) name$")
+    public void the_name_of_the_product_in_the_cart_should_match_the_name(String expected) {
+        List<WebElement> elementList = shoppingCartPage.getCartProductsList();
+        String actualName = shoppingCartPage.getProductName(elementList.get(0));
+
+        assertEquals(expected, actualName);
+    }
+
+    @And("^i go to the shopping cart page$")
+    public void i_go_to_the_shopping_cart_page() {
+        shoppingCartPage = homePage.goToShoppingCartPage();
     }
 
     @After

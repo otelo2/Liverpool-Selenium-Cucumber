@@ -38,7 +38,7 @@ public class HomePage {
     }
 
     public void clickAddToCartButton(WebElement product) {
-        product.findElement(By.className("btn btn_primary btn_small btn_inventory")).click();
+        product.findElement(By.cssSelector(".btn.btn_primary.btn_small.btn_inventory")).click();
     }
 
     public boolean ifInHomePage() {
