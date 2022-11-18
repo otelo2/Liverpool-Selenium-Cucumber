@@ -1,8 +1,5 @@
 package com.finalproject.qa.pageobjects;
 
-import java.util.List;
-
-import org.openqa.selenium.By;
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.WebElement;
 import org.openqa.selenium.support.FindBy;
@@ -15,38 +12,40 @@ public class HomePage {
     public HomePage(WebDriver driver) {
         this.driver = driver;
         PageFactory.initElements(driver, this);
+        driver.get("https://www.liverpool.com.mx/tienda/home");
     }
 
-    @FindBy(css = "#header_container > div.header_secondary_container > span")
-    WebElement productsHeaderText;
+    @FindBy(css = "#mainSearchbar")
+    WebElement searchBar;
 
-    @FindBy(css = "#shopping_cart_container > a")
-    WebElement shoppingCartButton;
+    @FindBy(xpath = "/html/body/div[1]/header/div[4]/div[2]/div/div/div/div[3]/div/div/div")
+    WebElement searchButton;
 
-    By productListBy = By.cssSelector("#inventory_container > div > div");
+    @FindBy(css = "span.a-header__topLink")
+    WebElement loginButton;
 
-    public String getHeaderText() {
-        return productsHeaderText.getText();
+    public WebElement getSearchBar() {
+        return searchBar;
     }
 
-    public List<WebElement> getProductsList() {
-        return driver.findElements(productListBy);
+    public WebElement getSearchButton() {
+        return searchButton;
     }
 
-    public String getPriceOfProduct(WebElement product) {
-        return product.findElement(By.cssSelector("div.inventory_item_description > div.pricebar > div")).getText();
+    public WebElement getLoginButton() {
+        return loginButton;
     }
 
-    public void clickAddToCartButton(WebElement product) {
-        product.findElement(By.cssSelector(".btn.btn_primary.btn_small.btn_inventory")).click();
+    public String getSearchBarText() {
+        return searchBar.getText();
     }
 
-    public boolean ifInHomePage() {
-        return driver.getCurrentUrl().equals("https://www.saucedemo.com/inventory.html");
-    }
+    public void writeInSearchBar(String query){ searchBar.sendKeys(query);}
 
-    public ShoppingCartPage goToShoppingCartPage() {
-        shoppingCartButton.click();
-        return new ShoppingCartPage(driver);
+    public void clickSearchButton(){searchButton.click();}
+
+    public SearchPage goToShoppingSearchPage() {
+        searchButton.click();
+        return new SearchPage(driver);
     }
 }

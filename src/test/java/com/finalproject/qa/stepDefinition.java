@@ -2,111 +2,89 @@ package com.finalproject.qa;
 
 import static org.junit.Assert.*;
 
-import java.util.List;
-
+import com.finalproject.qa.pageobjects.*;
 import org.openqa.selenium.*;
-
-import com.finalproject.qa.pageobjects.HomePage;
-import com.finalproject.qa.pageobjects.LoginPage;
-import com.finalproject.qa.pageobjects.ShoppingCartPage;
 
 import io.cucumber.java.After;
 import io.cucumber.java.en.*;
 
 public class stepDefinition {
     WebDriver driver;
-    ConfigFileReader configFileReader;
     HomePage homePage;
-    LoginPage loginPage;
-    ShoppingCartPage shoppingCartPage;
-    String actualPrice;
-
-    @Given("^navigate to Saucedemo login page in (.+)$")
-    public void navigate_to_saucedemo_login_page_in(String browser) {
-        driver = WebDriverProvider.createDriver(browser);
-        loginPage = new LoginPage(driver);
-    }
-
-    @When("^type the non existing username (.+)$")
-    public void type_the_non_existing_username(String username) {
-        loginPage.writeUsername(username);
-    }
-
-    @And("^type the non existing password (.+)$")
-    public void type_the_non_existing_password(String password) {
-        loginPage.writePassword(password);
-    }
-
-    @And("^click on the login button$")
-    public void click_on_the_login_button() {
-        loginPage.clickSignInButton();
-
-    }
-
-    @Then("^an error message should appear (.+)$")
-    public void an_error_message_should_appear(String error) {
-        String expectedErrorMessage = error;
-
-        String actualErrorMessage = loginPage.getLoginErrorMessage();
-
-        assertEquals(expectedErrorMessage, actualErrorMessage);
-    }
-
-    @When("login with the standard_user credentials")
-    public void login_with_the_standard_user_credentials() {
-        homePage = loginPage.logIn("standard_user", "secret_sauce");
-    }
-
-    @Then("i should log in to the store home page")
-    public void i_should_log_in_to_the_store_home_page() {
-        String expectedHeader = "PRODUCTS";
-
-        String actualHeader = homePage.getHeaderText();
-
-        assertEquals(expectedHeader, actualHeader);
-
-    }
-
-    @Given("i am in the home page")
-    public void i_am_in_the_home_page() {
-        assertTrue(homePage.ifInHomePage());
-    }
-
-    @When("^i check the price of the (.+) product$")
-    public void i_check_the_price_of_the_product(String number) {
-        List<WebElement> elementList = homePage.getProductsList();
-        Integer numberInteger = Integer.parseInt(number);
-        actualPrice = homePage.getPriceOfProduct(elementList.get(numberInteger));
-    }
-
-    @Then("^the actual price should match the (.+) price$")
-    public void the_actual_price_should_match_the_price(String expected) {
-        assertEquals(expected, actualPrice);
-    }
-
-    @When("^i add the (.+) product to the cart$")
-    public void i_add_the_product_to_the_cart(String number) {
-        List<WebElement> elementList = homePage.getProductsList();
-        Integer numberInteger = Integer.parseInt(number);
-        homePage.clickAddToCartButton(elementList.get(numberInteger));
-    }
-
-    @Then("^the name of the product in the cart should match the (.+) name$")
-    public void the_name_of_the_product_in_the_cart_should_match_the_name(String expected) {
-        List<WebElement> elementList = shoppingCartPage.getCartProductsList();
-        String actualName = shoppingCartPage.getProductName(elementList.get(0));
-
-        assertEquals(expected, actualName);
-    }
-
-    @And("^i go to the shopping cart page$")
-    public void i_go_to_the_shopping_cart_page() {
-        shoppingCartPage = homePage.goToShoppingCartPage();
-    }
+    SearchPage searchPage;
+    ProductPage productPage;
+    String productCode;
 
     @After
     public void tearDown() {
         driver.quit();
     }
 
+    @Given("^navigate to Liverpool home page in (.+)$")
+    public void navigate_to_liverpool_home_page_in_firefox(String browser) {
+        driver = WebDriverProvider.createDriver(browser);
+        homePage = new HomePage(driver);
+    }
+
+    @When("^type the name of an (.+) in the search bar$")
+    public void type_the_name_of_an_gap_in_the_search_bar(String search) {
+        homePage.writeInSearchBar(search);
+        searchPage = homePage.goToShoppingSearchPage();
+    }
+    @When("locate the search bar on the top of the screen and click on it")
+    public void locate_the_search_bar_on_the_top_of_the_screen_and_click_on_it() {
+        WebElement searchBar = homePage.getSearchBar();
+        searchBar.click();
+    }
+
+    @Then("the search results page is displayed")
+    public void the_search_results_page_is_displayed() throws InterruptedException {
+        assertTrue(searchPage.ifInSearchPage());
+    }
+    @Then("a screen states that there are no matches for the input data is displayed")
+    public void a_screen_states_that_there_are_no_matches_for_the_input_data_is_displayed() {
+        assertTrue(searchPage.getProductNotFoundText().contains("Lo sentimos, no encontramos nada para"));
+    }
+
+    @Then("all the products of the store are displayed")
+    public void all_the_products_of_the_store_are_displayed() {
+        // Write code here that turns the phrase above into concrete actions
+        assertNotNull(searchPage.getProductsList());
+    }
+
+    @Then("^a special screen with products of that (.+) shows up$")
+    public void a_special_screen_with_products_of_that_brand_shows_up(String brand) {
+        System.out.println(searchPage.getBrandPageNameText());
+        System.out.println(brand);
+        assertEquals(brand, searchPage.getBrandPageNameText());
+    }
+
+    @Then("^a normal screen with products of that (.+) shows up$")
+    public void a_normal_screen_with_products_of_that_brand_shows_up(String brand) {
+        assertEquals(brand, searchPage.getSearchResultText());
+    }
+
+    @When("^type the (.+) of an article and press Enter$")
+    public void type_the_rojo_of_an_article_and_press(String characteristic) {
+        homePage.writeInSearchBar(characteristic);
+        searchPage = homePage.goToShoppingSearchPage();
+    }
+    @Then("^a screen with products that match the (.+) shows up$")
+    public void a_screen_with_products_that_match_the_physical_characteristic_shows_up(String characteristic) {
+        WebElement product = searchPage.getProductsList().get(0);
+        assertEquals(characteristic,searchPage.getProductName(product));
+    }
+    @When("Click on one of the search results")
+    public void click_on_one_of_the_search_results() {
+        WebElement product = searchPage.getProductsList().get(4);
+        searchPage.openProductPage(product);
+    }
+    @When("Locate the product code and copy it")
+    public void locate_the_product_code_and_copy_it() {
+        productCode = productPage.getProductCodeText();
+    }
+    @Then("product page for the article is displayed")
+    public void product_page_for_the_article_is_displayed() {
+        assertTrue(productPage.ifInProductPage());
+    }
 }
